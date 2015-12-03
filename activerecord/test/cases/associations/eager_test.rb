@@ -1242,6 +1242,12 @@ class EagerAssociationTest < ActiveRecord::TestCase
     assert_equal projects.last.mentor.developers.first.contracts, projects.last.developers.last.contracts
   end
 
+  def test_eager_load_with_group_clause
+    assert_nothing_raised(ActiveRecord::StatementInvalid) do
+      Author.includes(:posts_ordered_by_comments_tags_count).first.posts_ordered_by_comments_tags_count
+    end
+  end
+
   test "scoping with a circular preload" do
     assert_equal Comment.find(1), Comment.preload(:post => :comments).scoping { Comment.find(1) }
   end
